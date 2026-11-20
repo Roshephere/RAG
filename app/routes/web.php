@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\KnowledgeBaseController;
 use Illuminate\Support\Facades\Route;
@@ -18,6 +19,27 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/knowledge-bases/{knowledgeBase}/documents', [DocumentController::class, 'store'])->name('knowledge-bases.documents.store');
     Route::delete('/knowledge-bases/{knowledgeBase}/documents/{document}', [DocumentController::class, 'destroy'])->name('knowledge-bases.documents.destroy');
     Route::get('/knowledge-bases/{knowledgeBase}/documents/{document}/download', [DocumentController::class, 'download'])->name('knowledge-bases.documents.download');
+
+    Route::prefix('knowledge-bases/{knowledgeBase}/conversations')
+        ->name('knowledge-bases.conversations.')
+        ->where([
+            'knowledgeBase' => '[0-9]+',
+            'conversation' => '[0-9]+',
+        ])
+        ->group(function () {
+
+            Route::get('/', [ConversationController::class, 'index'])->name('index');
+
+            Route::post('/', [ConversationController::class, 'store'])->name('store');
+
+            Route::get('/{conversation}', [ConversationController::class, 'show'])->name('show');
+
+            Route::delete('/{conversation}', [ConversationController::class, 'destroy'])->name('destroy');
+
+            Route::post('/{conversation}/messages', [ConversationController::class, 'storeMessage'])
+                ->middleware('throttle:10,1')
+                ->name('messages.store');
+        });
 });
 
 require __DIR__.'/settings.php';

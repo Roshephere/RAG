@@ -36,15 +36,19 @@ return [
     ],
 
     'gemini' => [
-    'key' => env('GEMINI_API_KEY'),
-    'embedding_model' => env(
-        'GEMINI_EMBEDDING_MODEL',
-        'gemini-embedding-001'
-    ),
-    'chat_model' => env(
-        'GEMINI_CHAT_MODEL',
-        'gemini-2.5-flash'
-    ),
-],
+        'key' => env('GEMINI_API_KEY'),
+        'embedding_model' => env(
+            'GEMINI_EMBEDDING_MODEL',
+            'gemini-embedding-001'
+        ),
+        'chat_model' => env(
+            'GEMINI_CHAT_MODEL',
+            'gemini-3.5-flash-lite'
+        ),
+        'generation_model' => env(
+            'GEMINI_GENERATION_MODEL',
+            'gemini-3.5-flash-lite'
+        ),
+    ],
 
 ];

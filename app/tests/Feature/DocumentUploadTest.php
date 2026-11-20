@@ -7,6 +7,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
+use App\Jobs\ProcessDocument;
+use Illuminate\Support\Facades\Queue;
 
 class DocumentUploadTest extends TestCase
 {
@@ -14,6 +16,8 @@ class DocumentUploadTest extends TestCase
 
     public function test_user_can_upload_document_to_own_knowledge_base(): void
     {
+        Queue::fake();
+
         // Arrange: use a fake filesystem
         Storage::fake('local');
 
@@ -51,6 +55,9 @@ class DocumentUploadTest extends TestCase
         // Assert: file exists on the private disk
         Storage::disk('local')
             ->assertExists($document->storage_path);
+
+            // Assert: document processing job was dispatched
+            Queue::assertPushed(ProcessDocument::class, 1);
     }
 
 public function test_user_cannot_upload_to_another_users_knowledge_base(): void

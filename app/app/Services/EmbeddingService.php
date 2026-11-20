@@ -59,6 +59,7 @@ class EmbeddingService
             'x-goog-api-key' => $key,
         ])
             ->acceptJson()
+            ->connectTimeout(30)
             ->timeout(90)
             ->post(
                 "https://generativelanguage.googleapis.com/v1beta/models/{$model}:batchEmbedContents",

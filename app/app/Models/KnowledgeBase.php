@@ -27,4 +27,9 @@ class KnowledgeBase extends Model
     {
         return $this->hasMany(Document::class);
     }
+
+    public function conversations(): HasMany
+    {
+        return $this->hasMany(Conversation::class);
+    }
 }
